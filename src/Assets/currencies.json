@@ -1,0 +1,18 @@
+[
+    {
+      "code": "EUR",
+      "symbol": "€"
+    },
+    {
+      "code": "DKK",
+      "symbol": "kr"
+    },
+    {
+      "code": "NOK",
+      "symbol": "kr"
+    },
+    {
+      "code": "SEK",
+      "symbol": "kr"
+    }
+  ]

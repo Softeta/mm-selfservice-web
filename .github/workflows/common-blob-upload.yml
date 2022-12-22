@@ -1,0 +1,26 @@
+name: Common Files Upload To Azure Blob Storage
+
+on:
+  workflow_call:
+    inputs:
+      source_dir:
+        required: true
+        type: string
+      container_name:
+        required: true
+        type: string 
+    secrets:
+      azure_blob_storage_connection_string:
+        required: true
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: bacongobbler/azure-blob-storage-upload@main
+        with:
+          source_dir: ${{ inputs.source_dir }}
+          container_name: ${{ inputs.container_name }}
+          connection_string: ${{ secrets.azure_blob_storage_connection_string }}
+          overwrite: 'true'

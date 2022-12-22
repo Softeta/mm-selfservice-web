@@ -1,0 +1,42 @@
+name: Upload Media Assets To Azure Blob Storage
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment for CD'
+        type: choice
+        default: 'dev'
+        required: false
+        options:
+        - dev
+        - test
+        - prod
+
+jobs:
+  dev:
+    if: ${{ github.event.inputs.environment == 'dev' }}
+    uses: ./.github/workflows/common-blob-upload.yml
+    with:
+      source_dir: media
+      container_name: media
+    secrets:
+      azure_blob_storage_connection_string: ${{ secrets.AZURE_BLOB_STORAGE_CONNECTION_STRING_DEV }}
+       
+  test:
+    if: ${{ github.event.inputs.environment == 'test' }}
+    uses: ./.github/workflows/common-blob-upload.yml
+    with:
+      source_dir: media
+      container_name: media
+    secrets:
+      azure_blob_storage_connection_string: ${{ secrets.AZURE_BLOB_STORAGE_CONNECTION_STRING_TEST }} 
+        
+  prod:
+    if: ${{ github.event.inputs.environment == 'prod' }}
+    uses: ./.github/workflows/common-blob-upload.yml
+    with:
+      source_dir: media
+      container_name: media
+    secrets:
+      azure_blob_storage_connection_string: ${{ secrets.AZURE_BLOB_STORAGE_CONNECTION_STRING_PROD }}

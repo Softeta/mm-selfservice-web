@@ -1,0 +1,1 @@
+export { JobDetailedView } from './JobDetailedView'

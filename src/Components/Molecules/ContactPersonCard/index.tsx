@@ -1,0 +1,1 @@
+export { ContactPersonCard } from './ContactPersonCard'

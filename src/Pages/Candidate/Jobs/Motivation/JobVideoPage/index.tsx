@@ -1,0 +1,1 @@
+export { JobVideoPage } from './JobVideoPage'

@@ -1,0 +1,23 @@
+{
+  "routes": [
+    {
+      "route": "/findtalent/*",
+      "headers": {
+        "cache-control": "no-store"
+      }
+    },
+    {
+      "route": "/myprofile/*",
+      "headers": {
+        "cache-control": "no-store"
+      }
+    }
+  ],
+  "navigationFallback": {
+      "rewrite": "index.html",
+      "exclude": ["/static/media/*", "/static/css/*"]
+  },
+  "mimeTypes": {
+      ".json": "text/json"
+  }
+}

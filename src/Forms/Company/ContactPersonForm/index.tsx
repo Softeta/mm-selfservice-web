@@ -1,0 +1,1 @@
+export { ContactPersonForm } from './ContactPersonForm'

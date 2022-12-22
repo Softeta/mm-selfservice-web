@@ -1,0 +1,285 @@
+name: Update danish language translations
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - b2c-templates/languages/da/**
+    
+  pull_request:
+    branches: [ master ]
+    paths:
+      - b2c-templates/languages/da/**
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment for CD'
+        type: choice
+        default: 'dev'
+        required: false
+        options:
+        - dev
+        - test
+        - prod
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Validate json
+      working-directory: b2c-authentication-templates/languages
+      run: find . -name *.json -printf "%p\n" -exec jq . {} +
+      
+  # DEV Sign up page
+  dev-localaccountsignup2_1:
+    if: ${{ github.event_name == 'push' || github.event.inputs.environment == 'dev' }}
+    steps:
+    - name: Update Companies local account sign up page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_company_signup_user_flow
+        page_language: da
+        page_id: localaccountsignup2_1
+        file_path: local-account-sign-up-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_ID_DEV }}
+        client_secret: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_SECRET_DEV }}
+        tenant_id: ${{ secrets.AZURE_COMPANIES_TENANT_ID_DEV }}
+
+    - name: Update Candidates local account sign up page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_candidate_signup_user_flow
+        page_language: da
+        page_id: localaccountsignup2_1
+        file_path: local-account-sign-up-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_ID_DEV }}
+        client_secret: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_SECRET_DEV }}
+        tenant_id: ${{ secrets.AZURE_CANDIDATES_TENANT_ID_DEV }}
+
+  # DEV Forgot password page
+  dev-password_change:
+    if: ${{ github.event_name == 'push' || github.event.inputs.environment == 'dev' }}
+    steps:
+    - name: Update Companies forgot password page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_company_password_reset_user_flow 
+        page_language: da
+        page_id: selfasserted_localaccountpasswordchange2_1
+        file_path: forgot-password-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_ID_DEV }}
+        client_secret: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_SECRET_DEV }}
+        tenant_id: ${{ secrets.AZURE_COMPANIES_TENANT_ID_DEV }}
+
+    - name: Update Candidates forgot password page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_candidate_password_reset_user_flow 
+        page_language: da
+        page_id: selfasserted_localaccountpasswordchange2_1
+        file_path: forgot-password-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_ID_DEV }}
+        client_secret: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_SECRET_DEV }}
+        tenant_id: ${{ secrets.AZURE_CANDIDATES_TENANT_ID_DEV }}
+
+  # DEV Sign in page
+  dev-deploy-sign_in:
+    if: ${{ github.event_name == 'push' || github.event.inputs.environment == 'dev' }}
+    steps:
+    - name: Update Companies sign in page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_company_signin_user_flow 
+        page_language: da
+        page_id: signin
+        file_path: sign-in-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_ID_DEV }}
+        client_secret: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_SECRET_DEV }}
+        tenant_id: ${{ secrets.AZURE_COMPANIES_TENANT_ID_DEV }}
+
+    - name: Update Candidates sign in page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_candidate_signin_user_flow 
+        page_language: da
+        page_id: signin
+        file_path: sign-in-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_ID_DEV }}
+        client_secret: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_SECRET_DEV }}
+        tenant_id: ${{ secrets.AZURE_CANDIDATES_TENANT_ID_DEV }}
+        
+  # TEST Sign up page
+  test-localaccountsignup2_1:
+    if: ${{ github.event.inputs.environment == 'test' }}
+    steps:
+    - name: Update Companies local account sign up page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_company_signup_user_flow
+        page_language: da
+        page_id: localaccountsignup2_1
+        file_path: local-account-sign-up-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_ID_TEST }}
+        client_secret: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_SECRET_TEST }}
+        tenant_id: ${{ secrets.AZURE_COMPANIES_TENANT_ID_TEST }}
+
+    - name: Update Candidates local account sign up page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_candidate_signup_user_flow
+        page_language: da
+        page_id: localaccountsignup2_1
+        file_path: local-account-sign-up-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_ID_TEST }}
+        client_secret: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_SECRET_TEST}}
+        tenant_id: ${{ secrets.AZURE_CANDIDATES_TENANT_ID_TEST }}
+
+  # TEST Forgot password page
+  test-password_change:
+    if: ${{ github.event.inputs.environment == 'test' }}
+    steps:
+    - name: Update Companies forgot password page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_company_password_reset_user_flow 
+        page_language: da
+        page_id: selfasserted_localaccountpasswordchange2_1
+        file_path: forgot-password-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_ID_TEST }}
+        client_secret: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_SECRET_TEST }}
+        tenant_id: ${{ secrets.AZURE_COMPANIES_TENANT_ID_TEST }}
+
+    - name: Update Candidates forgot password page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_candidate_password_reset_user_flow 
+        page_language: da
+        page_id: selfasserted_localaccountpasswordchange2_1
+        file_path: forgot-password-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_ID_TEST }}
+        client_secret: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_SECRET_TEST }}
+        tenant_id: ${{ secrets.AZURE_CANDIDATES_TENANT_ID_TEST }}
+
+  # TEST Sign in page
+  test-sign_in:
+    if: ${{ github.event.inputs.environment == 'test' }}
+    steps:
+    - name: Update Companies sign in page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_company_signin_user_flow 
+        page_language: da
+        page_id: signin
+        file_path: sign-in-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_ID_TEST }}
+        client_secret: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_SECRET_TEST }}
+        tenant_id: ${{ secrets.AZURE_COMPANIES_TENANT_ID_TEST }}
+
+    - name: Update Candidates sign in page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_candidate_signin_user_flow 
+        page_language: da
+        page_id: signin
+        file_path: sign-in-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_ID_TEST }}
+        client_secret: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_SECRET_TEST }}
+        tenant_id: ${{ secrets.AZURE_CANDIDATES_TENANT_ID_TEST }}
+        
+  # PROD Sign up page
+  prod-localaccountsignup2_1:
+    if: ${{ github.event.inputs.environment == 'prod' }}
+    steps:
+    - name: Update Companies local account sign up page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_company_signup_user_flow
+        page_language: da
+        page_id: localaccountsignup2_1
+        file_path: local-account-sign-up-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_ID_PROD }}
+        client_secret: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_SECRET_PROD }}
+        tenant_id: ${{ secrets.AZURE_COMPANIES_TENANT_ID_PROD }}
+
+    - name: Update Candidates local account sign up page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_candidate_signup_user_flow
+        page_language: da
+        page_id: localaccountsignup2_1
+        file_path: local-account-sign-up-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_ID_PROD }}
+        client_secret: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_SECRET_PROD }}
+        tenant_id: ${{ secrets.AZURE_CANDIDATES_TENANT_ID_PROD }}
+
+  # PROD Forgot password page
+  prod-password_change:
+    if: ${{ github.event.inputs.environment == 'prod' }}
+    steps:
+    - name: Update Companies forgot password page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_company_password_reset_user_flow 
+        page_language: da
+        page_id: selfasserted_localaccountpasswordchange2_1
+        file_path: forgot-password-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_ID_PROD }}
+        client_secret: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_SECRET_PROD }}
+        tenant_id: ${{ secrets.AZURE_COMPANIES_TENANT_ID_PROD }}
+
+    - name: Update Candidates forgot password page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_candidate_password_reset_user_flow 
+        page_language: da
+        page_id: selfasserted_localaccountpasswordchange2_1
+        file_path: forgot-password-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_ID_PROD }}
+        client_secret: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_SECRET_PROD }}
+        tenant_id: ${{ secrets.AZURE_CANDIDATES_TENANT_ID_PROD }}
+
+  # PROD Sign in page
+  prod-sign_in:
+    if: ${{ github.event.inputs.environment == 'prod' }}
+    steps:
+    - name: Update Companies sign in page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_company_signin_user_flow 
+        page_language: da
+        page_id: signin
+        file_path: sign-in-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_ID_PROD }}
+        client_secret: ${{ secrets.AZURE_COMPANIES_B2C_APP_CLIENT_SECRET_PROD }}
+        tenant_id: ${{ secrets.AZURE_COMPANIES_TENANT_ID_PROD }}
+
+    - name: Update Candidates sign in page
+      uses: ./.github/workflows/user-flow-language-update-common.yml
+      with:
+        b2c_user_flows_policy_name: B2C_1_candidate_signin_user_flow 
+        page_language: da
+        page_id: signin
+        file_path: sign-in-page.json
+      secrets:
+        client_id: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_ID_PROD }}
+        client_secret: ${{ secrets.AZURE_CANDIDATES_B2C_APP_CLIENT_SECRET_PROD }}
+        tenant_id: ${{ secrets.AZURE_CANDIDATES_TENANT_ID_PROD }}

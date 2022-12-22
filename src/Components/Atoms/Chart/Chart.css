@@ -1,0 +1,9 @@
+@layer Chart {
+    .not-filled-circle {
+        stroke: theme("colors.foggy-day")
+    }
+
+    .filled-circle {
+        stroke: theme("colors.blue-ribbon");
+    }
+}

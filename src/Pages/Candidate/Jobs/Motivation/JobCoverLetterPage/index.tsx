@@ -1,0 +1,1 @@
+export { JobCoverLetterPage } from './JobCoverLetterPage'

@@ -1,0 +1,56 @@
+name: Build and deploy DEV
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+env:
+  APP_LOCATION: "/" # location of your client code
+  APP_ARTIFACT_LOCATION: "dist" # location of client code build output
+  AZURE_STATIC_WEB_APPS_API_TOKEN: ${{ secrets.AZURE_STATIC_SELFSERVICE_APPS_API_TOKEN_DEV }} # secret containing deployment token for your static web app
+
+jobs:
+  build_and_deploy_job:
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    name: Build and Deploy Job
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build And Deploy
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ env.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: ${{ env.APP_LOCATION }}
+          app_artifact_location: ${{ env.APP_ARTIFACT_LOCATION }}
+        env:
+          VITE_FRONTOFFICE_API: "https://api.mmtest1.com"
+          VITE_FRONTOFFICE_COMPANY_DOMAIN: "marchermarholtcompanies"
+          VITE_FRONTOFFICE_COMPANY_APP_ID: "af17ce74-24e8-4001-b357-98f5c6365924"
+          VITE_FRONTOFFICE_COMPANY_SIGNUP_FLOW: "B2C_1_company_signup_user_flow"
+          VITE_FRONTOFFICE_COMPANY_SIGNIN_FLOW: "B2C_1_company_signin_user_flow"
+          VITE_FRONTOFFICE_COMPANY_FORGOT_PASSWORD_FLOW: "B2C_1_company_password_reset_user_flow"
+          VITE_FRONTOFFICE_COMPANY_SCOPE: "app-mm-front-office-company/FrontOffice.Company"
+          VITE_FRONTOFFICE_CANDIDATE_DOMAIN: "marchermarholtcandidates"
+          VITE_FRONTOFFICE_CANDIDATE_APP_ID: "23bbfb45-d097-46a6-8b74-ee8a1b2db287"
+          VITE_FRONTOFFICE_CANDIDATE_SIGNUP_FLOW: "B2C_1_candidate_signup_user_flow"
+          VITE_FRONTOFFICE_CANDIDATE_SIGNIN_FLOW: "B2C_1_candidate_signin_user_flow"
+          VITE_FRONTOFFICE_CANDIDATE_FORGOT_PASSWORD_FLOW: "B2C_1_candidate_password_reset_user_flow"
+          VITE_FRONTOFFICE_CANDIDATE_SCOPE: "app-mm-front-office-candidate/FrontOffice.Candidate"
+          VITE_BACKOFFICE_APP_ID: "d29bf227-1861-4294-953d-c0845f5d5894"
+          VITE_BACKOFFICE_TENANT_ID: "baeb372e-3535-4dcd-b14f-898ade9a376b"
+          VITE_BACKOFFICE_SCOPE: "api://app-mm-back-office-dev/BackOffice.User"
+          VITE_FRONTOFFICE_AUTOCOMPLETE_GEOCODER_API: "https://autocomplete.geocoder.ls.hereapi.com"
+          VITE_FRONTOFFICE_GEOCODER_API_KEY: ${{ secrets.GEOCODER_API_KEY_DEV }}
+          VITE_FRONTOFFICE_RESOURCE_LINKEDIN_URL: "https://stmmplatformpublicdev.blob.core.windows.net/media/linkedin-url.mov"
+          VITE_LANDING_WBESITE_URL: "https://marchermarkholt.com"
+          VITE_PAGE_SIZE: 15
+          VITE_COMPONENT_ITEMS_PAGE_SIZE: 10
+          VITE_FRONTOFFICE_CUBIKS_HOST: "cubiksonline.com"
+

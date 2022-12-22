@@ -1,0 +1,1 @@
+export { OurConsideration } from './OurConsideration'

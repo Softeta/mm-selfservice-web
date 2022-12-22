@@ -1,0 +1,1 @@
+export { CandidateConfirmationEmail } from './CandidateConfirmationEmail'

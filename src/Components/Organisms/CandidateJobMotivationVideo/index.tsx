@@ -1,0 +1,1 @@
+export { CandidateJobMotivationVideo } from './CandidateJobMotivationVideo'

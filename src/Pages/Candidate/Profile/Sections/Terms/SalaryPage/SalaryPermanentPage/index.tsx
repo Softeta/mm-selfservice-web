@@ -1,0 +1,1 @@
+export { SalaryPermanentPage } from './SalaryPermanentPage'

@@ -1,0 +1,1 @@
+export { SalaryFreelancePage } from './SalaryFreelancePage'

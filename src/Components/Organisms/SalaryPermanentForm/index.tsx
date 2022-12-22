@@ -1,0 +1,1 @@
+export { SalaryPermanentForm } from './SalaryPermanentForm'

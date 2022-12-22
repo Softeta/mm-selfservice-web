@@ -1,0 +1,88 @@
+name: Reusable B2C user flow language page update
+
+on:
+  workflow_call:
+    inputs:
+      b2c_user_flows_policy_name:
+        required: true
+        type: string
+      page_language:
+        required: true
+        type: string
+      page_id:
+        required: true
+        type: string
+      file_path:
+        required: true
+        type: string
+    secrets:
+      client_id:
+        required: false
+      client_secret:
+        required: false
+      tenant_id:
+        required: false
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: b2c-authentication-templates/languages
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get access token
+      run: |
+           RESPONSE=$(curl --silent --write-out ";%{http_code}" \
+           -X POST \
+           -d "client_id=${CLIENT_ID}
+               &scope=https%3A%2F%2Fgraph.microsoft.com%2F.default
+               &client_secret=${CLIENT_SECRET}
+               &grant_type=client_credentials" \
+           -H "Content-Type: application/x-www-form-urlencoded" \
+           https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token)
+           
+           STATUS=$(echo $RESPONSE | cut -d ';' -f2)
+            
+           if [ $STATUS == '200' ]
+           then
+             echo "B2C flows token receive succeed StatusCode=$STATUS"
+             TOKEN=$(echo $RESPONSE | cut -d ';' -f1 | jq -r '.access_token')             
+             echo "::add-mask::$TOKEN"
+             echo "access_token=$TOKEN" >> $GITHUB_ENV
+           else
+             echo "B2C flows token receive failed StatusCode=$STATUS"
+             exit 1
+           fi
+
+      env:
+        CLIENT_ID: ${{ secrets.client_id }}
+        CLIENT_SECRET: ${{ secrets.client_secret }}
+        TENANT_ID: ${{ secrets.tenant_id }}
+            
+    - name: Update B2C user workflow language
+      working-directory: b2c-authentication-templates/languages/${PAGE_LANGUAGE}
+      run: |
+           body=`cat ./${PAGE_LANGUAGE}/${FILE_PATH}`
+           
+           STATUS=$(curl --silent --output /dev/stderr --write-out "%{http_code}" \
+           -X PUT -d "${body}" \
+           -H "Authorization: Bearer $ACCESS_TOKEN" \
+           -H "Content-Type: application/json" \
+           'https://graph.microsoft.com/beta/identity/b2cUserFlows/'${B2C_USER_FLOWS_POLICY_NAME}'/languages/'${PAGE_LANGUAGE}'/overridesPages/'${PAGE_ID}'/$value')
+
+           if [ $STATUS == '201' ] || [ $STATUS == '204' ]
+           then
+             echo "B2C flows language ($PAGE_LANGUAGE) $PAGE_ID was updated with StatusCode=$STATUS"
+           else
+             echo "B2C flows language ($PAGE_LANGUAGE) $PAGE_ID update failed with StatusCode=$STATUS"
+             exit 1
+           fi
+
+      env:
+        B2C_USER_FLOWS_POLICY_NAME: ${{ inputs.b2c_user_flows_policy_name }}
+        PAGE_LANGUAGE: ${{ inputs.page_language }}
+        PAGE_ID: ${{ inputs.page_id }}
+        FILE_PATH: ${{ inputs.file_path }}
+        ACCESS_TOKEN: ${{ env.access_token }} 
+

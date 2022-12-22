@@ -1,0 +1,1 @@
+export { CompanyBottomMenu } from './CompanyBottomMenu'

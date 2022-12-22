@@ -1,0 +1,1 @@
+export { ModalTermsAndConditions } from './ModalTermsAndConditions'

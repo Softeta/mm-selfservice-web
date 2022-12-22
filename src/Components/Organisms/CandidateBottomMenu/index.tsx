@@ -1,0 +1,1 @@
+export { CandidateBottomMenu } from './CandidateBottomMenu'

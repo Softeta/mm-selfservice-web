@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --max-desktop-width: 960px;
+}
+
+@layer base {
+  html, body {
+    font-family: 'Open Sans', sans-serif;
+    @apply text-base leading-5 font-light;
+  }
+
+  .candidate {
+    h1 {
+      @apply text-xl font-serif font-bold;
+    }
+    h2 {
+      @apply text-lg;
+    }
+  }
+
+  .content-container-sm {
+    height: calc(100vh - theme('spacing.16'));
+  }
+
+  .content-container-md {
+    height: calc(100vh - theme('spacing.36'));
+  }
+
+  .content-container-xl {
+    height: calc(100vh - theme('spacing.32'));
+  }
+}

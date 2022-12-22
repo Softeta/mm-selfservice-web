@@ -1,0 +1,1 @@
+export { CandidateInfoContainer } from './CandidateInfoContainer'
